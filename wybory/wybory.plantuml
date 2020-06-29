@@ -1,0 +1,411 @@
+@startuml
+
+title __WYBORY's Class Diagram__\n
+
+  namespace wybory {
+    class wybory.Bajtocja {
+        - działania : Wektor[]
+        - komisjeOkręgów : Komisja[]
+        - numeryScalanychOkręgów : ArrayList<Para<Integer, Integer>>
+        - partie : Partia[]
+        - podstawoweOkręgiWyborcze : OkręgWyborczy[]
+        - uformowaneOkręgiWyborcze : OkręgWyborczy[]
+        + Bajtocja()
+        + formujOkręgiWyborcze()
+        + głosowanie()
+        + kampaniaWyborcza()
+        + liczenieGłosów()
+        + rozdzielMandaty()
+        + wypiszPodsumowanie()
+        - scalony()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.Głos {
+        - imięWyborcy : String
+        - nazwiskoWyborcy : String
+        + Głos()
+        + naKogo()
+        + toString()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.Input {
+        ~ in : Scanner
+        - działania : Wektor[]
+        - liczbaCech : int
+        - liczbaDziałań : int
+        - liczbaOkręgów : int
+        - liczbaPartii : int
+        - liczbaWyborcówWOkręgach : int[]
+        - listyWyborczeOkręgów : ListaWyborcza[]
+        - okręgiDoScalenia : ArrayList<Para<Integer, Integer>>
+        - okręgiWBajtocji : OkręgWyborczy[]
+        - partieWBajtocji : Partia[]
+        + czytajDane()
+        + czytajDziałania()
+        + czytajITwórzPartie()
+        + czytajKandydatów()
+        + czytajLiczbęWyborcówWOkręgach()
+        + czytajOkręgiDoScalenia()
+        + czytajWyborców()
+        + dajDziałania()
+        + dajOkręgi()
+        + dajOkręgiDoScalenia()
+        + dajPartie()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.JednocechowyMaks {
+        - maksymalizowanaCecha : int
+        + JednocechowyMaks()
+        # oceńKandydata()
+        # zmieńOpinię()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.JednocechowyMin {
+        - minimalizowanaCecha : int
+        + JednocechowyMin()
+        # oceńKandydata()
+        # zmieńOpinię()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.Kandydat {
+        - imię : String
+        - nazwaPartii : String
+        - nazwisko : String
+        - numerNaLiście : int
+        - numerOkręgu : int
+        + Kandydat()
+        + cecha()
+        + cechy()
+        + equals()
+        + hashCode()
+        + numerNaLiście()
+        + numerOkręgu()
+        + partia()
+        + toString()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.Komisja {
+        - głosy : ArrayList<Głos>
+        - liczbaMandatów : int
+        - liczbaMandatówPartii : Map<String, Integer>
+        - rejestrGłosów : Map<Kandydat, Integer>
+        - sumaGłosówPartii : Map<String, Integer>
+        + Komisja()
+        + ileMandatów()
+        + policzGłosy()
+        + przeliczNaMandaty()
+        + wypiszGłosy()
+        + wypiszKandydatów()
+        + wypiszMandaty()
+        + zarejestrujGłos()
+        - dodajGłosNaKandydata()
+        - dodajGłosNaPartię()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.ListaKandydatów {
+        - kandydaci : Kandydat[]
+        - nazwaPartii : String
+        + ListaKandydatów()
+        + ListaKandydatów()
+        + iterator()
+        + partia()
+        + scal()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.ListaWyborcza {
+        - listyPartii : ArrayList<ListaKandydatów>
+        + ListaWyborcza()
+        + ListaWyborcza()
+        + dajListęPartii()
+        + dodajListęPartii()
+        + iterator()
+        + scal()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.ListaWyborczaIterator {
+        - aktualnaListaIndeks : int
+        - listaKandydatów : Iterator<Kandydat>
+        - listyPartii : ArrayList<ListaKandydatów>
+        + hasNext()
+        + next()
+        ~ ListaWyborczaIterator()
+    }
+  }
+  
+
+  namespace wybory {
+    abstract class wybory.Maksymalizujący {
+        + Maksymalizujący()
+        {abstract} # oceńKandydata()
+        # wybierzKandydata()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.MetodaDHondta {
+        + MetodaDHondta()
+        + toString()
+        # policzNastępnyDzielnik()
+        # zacznijGenerować()
+    }
+  }
+  
+
+  namespace wybory {
+    abstract class wybory.MetodaDzielników {
+        # poprzedniDzielnik : int
+        + przeliczNaMandaty()
+        {abstract} # policzNastępnyDzielnik()
+        # rozdajMandaty()
+        {abstract} # zacznijGenerować()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.MetodaHareaNiemeyera {
+        + przeliczNaMandaty()
+        + toString()
+        - sumaGłosów()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.MetodaSainteLaguë {
+        + MetodaSainteLaguë()
+        + toString()
+        # policzNastępnyDzielnik()
+        # zacznijGenerować()
+    }
+  }
+  
+
+  namespace wybory {
+    abstract class wybory.Minimalizujący {
+        + Minimalizujący()
+        {abstract} # oceńKandydata()
+        # wybierzKandydata()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.MojaPartia {
+        + MojaPartia()
+        + przeprowadźKampanię()
+        - wybierzNajmniejPartyjnych()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.OkręgWyborczy {
+        - numerOkręgu : int
+        - wyborcy : Wyborca[]
+        + OkręgWyborczy()
+        + dajListęWyborczą()
+        + dajListęWyborczą()
+        + koszt()
+        + numer()
+        + przeprowadźGłosowanie()
+        + scal()
+        + sondaż()
+        + wykonajDziałanie()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.Para {
+        + Para()
+        + drugi()
+        + pierwszy()
+        + toString()
+    }
+  }
+  
+
+  namespace wybory {
+    abstract class wybory.Partia {
+        # budżet : int
+        # nazwaPartii : String
+        + Partia()
+        + czyStaćCięNaKampanię()
+        + nazwaPartii()
+        {abstract} + przeprowadźKampanię()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.PartiaSkromna {
+        + PartiaSkromna()
+        + przeprowadźKampanię()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.PartiaZRozmachem {
+        + PartiaZRozmachem()
+        + przeprowadźKampanię()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.PartiaZachłanna {
+        + PartiaZachłanna()
+        + przeprowadźKampanię()
+    }
+  }
+  
+
+  namespace wybory {
+    abstract class wybory.PrzeliczanieMandatów {
+        {abstract} + przeliczNaMandaty()
+        {static} # dodajDoPosortowanej()
+        # zarejestrujMandat()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.Sondaż {
+        - wyborcy : Wyborca[]
+        + Sondaż()
+        + ileWyborcówPartyjnych()
+        + ileWyborcówZmieniaOpinię()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.Wektor {
+        - wektor : int[]
+        + Wektor()
+        + Wektor()
+        + dodaj()
+        + iloczynSkalarny()
+        + sumaModułówWspółrzędnych()
+        + wartość()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.Wszechstronny {
+        + Wszechstronny()
+        + czyZmieniaszOpinię()
+        # oceńKandydata()
+        # zmieńOpinię()
+    }
+  }
+  
+
+  namespace wybory {
+    abstract class wybory.Wyborca {
+        # imię : String
+        # nazwisko : String
+        # numerOkręgu : int
+        # ulubionaPartia : String
+        + Wyborca()
+        + czyZmieniaszOpinię()
+        + głosuj()
+        + ulubionaPartia()
+        {abstract} # wybierzKandydata()
+        {abstract} # zmieńOpinię()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.WyboryWBajtocji {
+        {static} - metody : PrzeliczanieMandatów[]
+        {static} + main()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.ŻelaznyElektoratKandydata {
+        - numerKandydataNaLiście : int
+        + ŻelaznyElektoratKandydata()
+        # wybierzKandydata()
+        # zmieńOpinię()
+    }
+  }
+  
+
+  namespace wybory {
+    class wybory.ŻelaznyElektoratPartyjny {
+        + ŻelaznyElektoratPartyjny()
+        # wybierzKandydata()
+        # zmieńOpinię()
+    }
+  }
+  
+
+  wybory.Głos o-- wybory.Kandydat : naKogo
+  wybory.JednocechowyMaks -up-|> wybory.Maksymalizujący
+  wybory.JednocechowyMin -up-|> wybory.Minimalizujący
+  wybory.Kandydat o-- wybory.Wektor : cechy
+  wybory.ListaKandydatów .up.|> java.lang.Iterable
+  wybory.ListaWyborcza .up.|> java.lang.Iterable
+  wybory.ListaWyborczaIterator .up.|> java.util.Iterator
+  wybory.Maksymalizujący -up-|> wybory.Wyborca
+  wybory.MetodaDHondta -up-|> wybory.MetodaDzielników
+  wybory.MetodaDzielników -up-|> wybory.PrzeliczanieMandatów
+  wybory.MetodaHareaNiemeyera -up-|> wybory.PrzeliczanieMandatów
+  wybory.MetodaSainteLaguë -up-|> wybory.MetodaDzielników
+  wybory.Minimalizujący -up-|> wybory.Wyborca
+  wybory.MojaPartia -up-|> wybory.Partia
+  wybory.OkręgWyborczy o-- wybory.ListaWyborcza : listaWyborcza
+  wybory.Para o-- T2 : drugi
+  wybory.Para o-- T1 : pierwszy
+  wybory.PartiaSkromna -up-|> wybory.Partia
+  wybory.PartiaZRozmachem -up-|> wybory.Partia
+  wybory.PartiaZachłanna -up-|> wybory.Partia
+  wybory.Wszechstronny -up-|> wybory.Maksymalizujący
+  wybory.Wszechstronny o-- wybory.Wektor : wagiCech
+  wybory.ŻelaznyElektoratKandydata -up-|> wybory.Wyborca
+  wybory.ŻelaznyElektoratPartyjny -up-|> wybory.Wyborca
+
+
+right footer
+
+
+PlantUML diagram generated by SketchIt! (https://bitbucket.org/pmesmeur/sketch.it)
+For more information about this tool, please contact philippe.mesmeur@gmail.com
+endfooter
+
+@enduml
