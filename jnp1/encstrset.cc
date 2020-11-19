@@ -1,11 +1,8 @@
 #include "encstrset.h"
-
-#include <iostream>
 #include <sstream>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <cassert>
 #include <vector>
 
 #ifdef NDEBUG
@@ -46,16 +43,16 @@ using std::vector;
 namespace {  // funkcje pomocnicze
 
     /* Stałe i funkcje służące do wypisywania wiadomości diagnostycznych */
-    //const string EMPTY;
+
     const unsigned int OP_COUNT = 8;
     const unsigned int MESSAGE_TYPE_COUNT = 5;
     const unsigned int MESSAGE_SEGMENT_COUNT = 4;
 
     using message_container_t = vector<vector<vector<string>>>;
 
-    message_container_t& message() {
+    message_container_t &message() {
 
-        static const string message_string[8][5][4] =
+        static const string message_string[OP_COUNT][MESSAGE_TYPE_COUNT][MESSAGE_SEGMENT_COUNT] =
                 {{{"encstrset_new(",    ")",  "",   ""},
                          {"encstrset_new: set #",    " created",           "",            ""}},
 
@@ -64,25 +61,25 @@ namespace {  // funkcje pomocnicze
                          {"encstrset_delete: set #", " does not exist", "", ""}},
 
                  {{"encstrset_size(",   ")",  "",   ""},
-                         {"encstrset_size: set #",   " contains ",         " elements",   ""},
+                         {"encstrset_size: set #",   " contains ",         " element(s)", ""},
                          {"encstrset_size: set #",   " does not exist", "", ""}},
 
                  {{"encstrset_insert(", ", ", ", ", ")"},
                          {"encstrset_insert: set #", ", cypher ",          " inserted",   ""},
                          {"encstrset_insert: set #", " does not exist", "", ""},
-                         {"encstrset_insert: set #",        ", cypher ",                     " already present", ""},
+                         {"encstrset_insert: set #",        ", cypher ",                     " was already present", ""},
                          {"encstrset_insert: invalid value (NULL)", "", "", ""}},
 
                  {{"encstrset_remove(", ", ", ", ", ")"},
                          {"encstrset_remove: set #", ", cypher ",          " removed",    ""},
                          {"encstrset_remove: set #", " does not exist", "", ""},
-                         {"encstrset_remove: set #",        ", cypher ",                     " was not present", ""},
+                         {"encstrset_remove: set #",        ", cypher ",                     " was not present",     ""},
                          {"encstrset_remove: invalid value (NULL)", "", "", ""}},
 
                  {{"encstrset_test(",   ", ", ", ", ")"},
                          {"encstrset_test: set #",   ", cypher ",          " is present", ""},
                          {"encstrset_test: set #",   " does not exist", "", ""},
-                         {"encstrset_test: set #",          ", cypher ",                     " is not present",  ""},
+                         {"encstrset_test: set #",          ", cypher ",                     " is not present",      ""},
                          {"encstrset_test: invalid value (NULL)",   "", "", ""}},
 
                  {{"encstrset_clear(",  ")",  "",   ""},
@@ -92,12 +89,13 @@ namespace {  // funkcje pomocnicze
                  {{"encstrset_copy(",   ", ", ")",  ""},
                          {"encstrset_copy: cypher ", " copied from set #", " to set #",   ""},
                          {"encstrset_copy: set #",   " does not exist", "", ""},
-                         {"encstrset_copy: copied cypher ", " was already present in set #", "",                 ""}}};
+                         {"encstrset_copy: copied cypher ", " was already present in set #", "",                     ""}}};
 
-        static message_container_t message = message_container_t(8, vector<vector<string>>(5, vector<string>()));
-        for (unsigned i = 0; i < 8; i++) {
-            for (unsigned j = 0; j < 5; j++) {
-                message[i][j] = vector<string>(message_string[i][j], message_string[i][j] + 4);
+        static message_container_t message = message_container_t(OP_COUNT, vector<vector<string>>(MESSAGE_TYPE_COUNT,
+                                                                                                  vector<string>()));
+        for (unsigned i = 0; i < OP_COUNT; i++) {
+            for (unsigned j = 0; j < MESSAGE_TYPE_COUNT; j++) {
+                message[i][j] = vector<string>(message_string[i][j], message_string[i][j] + MESSAGE_SEGMENT_COUNT);
             }
         }
         return message;
@@ -132,18 +130,16 @@ namespace {  // funkcje pomocnicze
 
     unsigned long id_counter = 0;                                   // licznik id dla zbiorów
 
-    //unordered_map<unsigned long, unordered_set<string>> encstrmap;  // mapa przechowująca wszystkie dane ecstrseta
-
     using encstrset_map_t = unordered_map<unsigned long, unordered_set<string>>;
 
-    encstrset_map_t & encstrset_map(){
+    encstrset_map_t &encstrset_map() {
         static encstrset_map_t *ans = new encstrset_map_t;
         return *ans;
     }
 
     // koduje wartość za pomocą klucza zgodnie ze specyfikacją zadania
     string encode(const char *value, const char *key) {
-        assert(value != nullptr); // zakładamy, że do funkcji zostały przekazane poprawne parametry
+        // zakładamy, że do funkcji zostały przekazane poprawne parametry
         string value_str(value);
         string key_str = key == nullptr ? "" : key;
 
@@ -165,7 +161,7 @@ namespace {  // funkcje pomocnicze
         size_t size = src.length();
 
         for (size_t i = 0; i < size; i++) {
-            if (src[i] < 16) // FIXME: dwie cyfry zamiast jednej
+            if (src[i] < 16)
                 ss << "0";
             ss << hex << uppercase << (int) src[i];
 
