@@ -51,7 +51,7 @@ public class Transaction {
     }
 
     public void addOperation(ResourceId rid, ResourceOperation o) {
-        allOperations.push(new Pair(o, rid));
+        allOperations.push(new Pair<ResourceOperation, ResourceId>(o, rid));
     }
 
     public Stack<Pair<ResourceOperation, ResourceId>> getAllOperations() {
