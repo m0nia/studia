@@ -35,8 +35,7 @@ public final class TransactionManagerFactory {
 			Collection<Resource> resources,
 			LocalTimeProvider timeProvider
 	) {
-		// FIXME: implement
-		throw new AssertionError("UNIMPLEMENTED!");
+		return new TransactionManagerBasic(resources, timeProvider);
 	}
 	
 }
