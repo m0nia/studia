@@ -1,3 +1,9 @@
+/*
+Autorzy:
+Igor Witkowski
+Monika Michaluk
+*/
+
 #ifndef ENCSTRSET_H
 #define ENCSTRSET_H
 
